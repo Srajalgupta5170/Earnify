@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusEarn - Saved Jobs</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">CampusEarn</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="post-job.html" id="nav-post-job" style="display:none;">Post a Job</a>
+            <a href="recruiter-dashboard.html" id="nav-recruiter-dash" style="display:none;">My Posted Jobs</a>
+            <a href="student-dashboard.html" id="nav-student-dash" style="display:none;">My Applications</a>
+            <a href="saved-jobs.html" id="nav-saved-jobs" style="display:none;">Saved Jobs</a>
+            <a href="login.html" id="nav-login">Login / Signup</a>
+            
+            <div class="nav-icons" id="nav-icons" style="display:none;">
+                <div class="bell-icon" id="bell-icon">
+                    🔔
+                    <span class="notif-badge" id="notif-badge" style="display:none;">0</span>
+                    <div class="notif-dropdown" id="notif-dropdown" style="display:none;">
+                        <!-- Notifications populate here -->
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#" id="nav-logout" style="display:none;">Logout</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h2>My Saved Jobs</h2>
+        <div id="loading-spinner" class="spinner" style="display: block;">Loading saved jobs...</div>
+        <div id="no-jobs-msg" style="display: none;text-align:center;">You have no saved jobs.</div>
+        <section class="jobs-list" id="jobs-container">
+            <!-- Saved Jobs dynamically inserted here -->
+        </section>
+    </main>
+
+    <!-- Specific script for saved jobs -->
+    <script type="module" src="js/saved-jobs.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

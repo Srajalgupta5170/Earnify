@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusEarn - Student Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">CampusEarn</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="student-dashboard.html">My Applications</a>
+            <a href="#" id="nav-logout">Logout</a>
+        </nav>
+    </header>
+
+    <main class="dashboard-container">
+        <h2>My Applications</h2>
+        <div id="loading-spinner" class="spinner" style="display: none;"></div>
+        <div id="no-apps-msg" class="message" style="display: none;">You haven't applied to any jobs yet.</div>
+        
+        <section class="jobs-list" id="applications-container">
+            <!-- Applied jobs will appear here -->
+        </section>
+    </main>
+
+    <script type="module" src="js/student-dashboard.js"></script>
+</body>
+</html>

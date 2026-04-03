@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusEarn - Home</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">🎓 CampusEarn</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="post-job.html" id="nav-post-job" style="display:none;">Post a Job</a>
+            <a href="recruiter-dashboard.html" id="nav-recruiter-dash" style="display:none;">My Posted Jobs</a>
+            <a href="student-dashboard.html" id="nav-student-dash" style="display:none;">My Applications</a>
+            <a href="saved-jobs.html" id="nav-saved-jobs" style="display:none;">Saved Jobs</a>
+            <a href="login.html" id="nav-login">Login / Signup</a>
+            <div class="nav-icons" id="nav-icons" style="display:none;">
+                <div class="bell-icon" id="bell-icon">
+                    🔔<span class="notif-badge" id="notif-badge">0</span>
+                    <div class="notif-dropdown" id="notif-dropdown">
+                        <!-- Notifications populated here -->
+                    </div>
+                </div>
+            </div>
+            <a href="#" id="nav-logout" style="display:none;">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Find Part-Time Jobs & Online Tasks</h1>
+            <p>The premium job platform exclusively for college students.</p>
+        </section>
+
+        <section class="filters card">
+            <input type="text" id="search-input" placeholder="Search by title...">
+            <select id="category-filter">
+                <option value="all">All Categories</option>
+                <option value="Local">Local Jobs</option>
+                <option value="Online">Online Tasks</option>
+            </select>
+            <select id="urgency-filter">
+                <option value="all">All Urgency Levels</option>
+                <option value="Urgent">Urgent</option>
+                <option value="Normal">Normal</option>
+                <option value="Flexible">Flexible</option>
+            </select>
+            <input type="text" id="location-filter" placeholder="Location (e.g., Campus)">
+        </section>
+
+        <div id="loading-spinner" class="spinner" style="display: none;"></div>
+        
+        <div id="no-jobs-msg" class="message" style="display: none; text-align: center;">
+            No jobs found matching your criteria.
+        </div>
+        <!-- Recommended section for Students -->
+        <section id="recommended-section" style="display: none; margin-bottom: 2rem;">
+            <h2>⭐ Recommended For You</h2>
+            <p style="color:#777; margin-bottom: 1rem;">Based on your location and urgent needs.</p>
+            <div class="jobs-list" id="recommended-container">
+                <!-- Recommended Jobs populated here -->
+            </div>
+            <hr style="margin-top:2rem; border:0; border-top:1px solid #ddd;">
+        </section>
+
+        <h2>All Jobs</h2>        <section class="jobs-list" id="jobs-container">
+            <!-- Jobs will be populated here by JavaScript -->
+        </section>
+    </main>
+
+    <!-- Firebase SDKs -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

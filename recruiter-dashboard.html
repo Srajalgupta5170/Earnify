@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusEarn - Recruiter Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">CampusEarn</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="post-job.html">Post a Job</a>
+            <a href="recruiter-dashboard.html">My Posted Jobs</a>
+            <a href="#" id="nav-logout">Logout</a>
+        </nav>
+    </header>
+
+    <main class="dashboard-container">
+        <h2>My Posted Jobs Analytics</h2>
+        
+        <section class="analytics-cards">
+            <div class="stat-card">
+                <h3>Total Jobs</h3>
+                <p id="total-jobs-count">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Applications</h3>
+                <p id="total-apps-count">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Accepted / Rejected</h3>
+                <p id="accept-ratio-count">0 / 0</p>
+            </div>
+        </section>
+
+        <h2>Detailed Postings</h2>
+        <div id="loading-spinner" class="spinner" style="display: none;"></div>
+        <div id="no-jobs-msg" class="message" style="display: none;">You haven't posted any jobs yet.</div>
+        
+        <section class="jobs-list" id="posted-jobs-container">
+            <!-- Posted jobs will appear here -->
+        </section>
+    </main>
+
+    <script type="module" src="js/recruiter-dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusEarn - Post a Job</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">CampusEarn</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="#" id="nav-logout">Logout</a>
+        </nav>
+    </header>
+
+    <main class="post-job-container">
+        <div class="card">
+            <h2>Post a New Job</h2>
+            <form id="post-job-form">
+                <input type="text" id="job-title" placeholder="Job Title" required>
+                <textarea id="job-desc" placeholder="Job Description" required></textarea>
+                <select id="job-category" required>
+                    <option value="Local">Local Job</option>
+                    <option value="Online">Online Task</option>
+                </select>
+                <input type="text" id="job-location" placeholder="Location (if local)">
+                <input type="text" id="job-payment" placeholder="Payment / Compensation" required>
+                <select id="job-urgency" required>
+                    <option value="Normal">Normal</option>
+                    <option value="Flexible">Flexible</option>
+                    <option value="Urgent">Urgent</option>
+                </select>
+                <button type="submit" class="btn">Post Job</button>
+            </form>
+            <p id="post-message" class="message"></p>
+        </div>
+    </main>
+
+    <script type="module" src="js/post-job.js"></script>
+</body>
+</html>

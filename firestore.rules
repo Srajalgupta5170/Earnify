@@ -1,0 +1,59 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Users collection
+    // Users can read any user profile (to verify roles/location)
+    // Users can only update their own profile document
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // 2. Jobs collection
+    // Anyone logged in can view jobs
+    // ONLY users with the 'recruiter' role can create jobs
+    // ONLY the original recruiter who created the job can update or delete it
+    match /jobs/{jobId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null 
+                    && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'recruiter'
+                    && request.resource.data.recruiterId == request.auth.uid;
+      allow update, delete: if request.auth != null 
+                    && resource.data.recruiterId == request.auth.uid;
+    }
+
+    // 3. Applications collection
+    // ONLY students can create applications, and it must contain their correct studentId
+    // A recruiter can read and update (Accept/Reject) applications for THEIR specific jobs
+    // A student can read their own applications
+    match /applications/{applicationId} {
+      allow create: if request.auth != null 
+                    && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'student'
+                    && request.resource.data.studentId == request.auth.uid;
+      
+      allow read: if request.auth != null 
+                  && (resource.data.studentId == request.auth.uid || 
+                      get(/databases/$(database)/documents/jobs/$(resource.data.jobId)).data.recruiterId == request.auth.uid);
+      
+      allow update: if request.auth != null 
+                    && get(/databases/$(database)/documents/jobs/$(resource.data.jobId)).data.recruiterId == request.auth.uid;
+    }
+
+    // 4. Notifications collection
+    // Anyone can read and update their OWN notifications
+    // Recruiters can CREATE notifications for students they Accepted/Rejected
+    match /notifications/{notifId} {
+      allow read, update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null 
+                    && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'recruiter';
+    }
+
+    // 5. Saved Jobs collection
+    // Students can read/write their own bookmarks
+    match /savedJobs/{saveId} {
+      allow read, write: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+  }
+}

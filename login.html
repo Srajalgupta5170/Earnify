@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusEarn - Login</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">CampusEarn</div>
+        <nav>
+            <a href="index.html">Home</a>
+        </nav>
+    </header>
+
+    <main class="login-container">
+        <div class="card">
+            <h2>Login / Signup</h2>
+            <form id="auth-form">
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <!-- Location field to enable Smart Job Matching -->
+                <input type="text" id="location" placeholder="City or Campus (e.g., New York, UCLA)">
+                <select id="role-select">
+                    <option value="student">Student (Job Seeker)</option>
+                    <option value="recruiter">Recruiter (Job Poster)</option>
+                </select>
+                <div class="auth-buttons">
+                    <button type="button" id="login-btn" class="btn">Login</button>
+                    <button type="button" id="signup-btn" class="btn btn-secondary">Sign Up</button>
+                </div>
+            </form>
+            <p id="auth-message" class="message"></p>
+        </div>
+    </main>
+
+    <script type="module" src="js/auth.js"></script>
+</body>
+</html>
