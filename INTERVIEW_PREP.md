@@ -1,12 +1,12 @@
-# CampusEarn - Interview Preparation Guide
+# Earnify - Interview Preparation Guide
 
-This document is designed to help you discuss **CampusEarn** professionally in job interviews, portfolio presentations, or resume deep-dives.
+This document is designed to help you discuss **Earnify** professionally in job interviews, portfolio presentations, or resume deep-dives.
 
 ---
 
 ## 1. Key Talking Points (The "Elevator Pitch")
-**"What is CampusEarn?"**
-> "CampusEarn is a full-stack, responsive web application I built to solve a real-world problem: helping college students find flexible, local, and urgent micro-tasks or part-time jobs. Instead of dealing with massive corporate job boards, local businesses can instantly route urgent jobs to students in their area."
+**"What is Earnify?"**
+> "Earnify is a full-stack, responsive web application I built to solve a real-world problem: helping college students find flexible, local, and urgent micro-tasks or part-time jobs. Instead of dealing with massive corporate job boards, local businesses can instantly route urgent jobs to students in their area."
 
 **Key Achievements to Highlight:**
 * **Authentication & Security:** "I implemented secure role-based access control (RBAC) using Firebase Authentication. Students and Recruiters have entirely different dashboard experiences, tightly enforced by Firebase Security Rules on the backend to prevent unauthorized reads/writes."
