@@ -100,6 +100,21 @@ git clone https://github.com/yourusername/Earnify.git
 cd Earnify
 ```
 
+### Step 2: Run the Project Locally
+Since this is a static web application, you can use any local web server to run it.
+
+Using Node.js (npx):
+```bash
+npx serve
+```
+
+Or using Python:
+```bash
+python -m http.server
+```
+
+Now, simply open the URL provided by the server (e.g., `http://localhost:3000` or `http://localhost:8000`) in your browser.
+
 ### Step 2: Create a Firebase Backend
 1. Go to the [Firebase Console](https://console.firebase.google.com/).
 2. Click **Add Project** and name it "Earnify-Dev".
