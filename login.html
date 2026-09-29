@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Earnify - Login</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=20260929">
 </head>
-<body>
+<body class="auth-page">
     <header>
         <div class="logo">Earnify</div>
         <nav>
@@ -14,27 +14,92 @@
         </nav>
     </header>
 
-    <main class="login-container">
-        <div class="card">
-            <h2>Login / Signup</h2>
-            <form id="auth-form">
-                <input type="email" id="email" placeholder="Email" required>
-                <input type="password" id="password" placeholder="Password" required>
-                <!-- Location field to enable Smart Job Matching -->
-                <input type="text" id="location" placeholder="City or Campus (e.g., New York, UCLA)">
-                <select id="role-select">
-                    <option value="student">Student (Job Seeker)</option>
-                    <option value="recruiter">Recruiter (Job Poster)</option>
-                </select>
-                <div class="auth-buttons">
-                    <button type="button" id="login-btn" class="btn">Login</button>
-                    <button type="button" id="signup-btn" class="btn btn-secondary">Sign Up</button>
+    <main class="auth-shell">
+        <section class="auth-visual">
+            <div class="visual-badge">Find jobs. Build careers.</div>
+            <h1>Welcome to your next opportunity.</h1>
+            <p>Discover talent, connect with recruiters, and grow your future with a smarter job platform built for students and employers.</p>
+            <ul class="feature-list">
+                <li>Smart job discovery</li>
+                <li>Recruiter hiring tools</li>
+                <li>Seamless application tracking</li>
+            </ul>
+        </section>
+
+        <section class="auth-card">
+            <div class="auth-brand-row">
+                <div class="brand-mark">E</div>
+                <span>Earnify</span>
+            </div>
+
+            <div class="auth-toggle" aria-label="Authentication mode selector">
+                <button type="button" class="auth-toggle-btn active" data-auth-mode="login">Login</button>
+                <button type="button" class="auth-toggle-btn" data-auth-mode="signup">Sign Up</button>
+            </div>
+
+            <div class="auth-panel active" id="login-panel">
+                <div class="panel-header">
+                    <h2>Welcome back</h2>
+                    <p>Sign in to continue</p>
                 </div>
-            </form>
+                <div class="auth-form-fields">
+                    <label class="field-label">
+                        <span>Email address</span>
+                        <input type="email" id="login-email" placeholder="you@example.com" required>
+                    </label>
+                    <label class="field-label">
+                        <span>Password</span>
+                        <input type="password" id="login-password" placeholder="••••••••" required>
+                    </label>
+                </div>
+
+                <div class="auth-actions-row">
+                    <label class="remember-box">
+                        <input type="checkbox">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="text-link">Forgot password?</a>
+                </div>
+
+                <button type="button" id="login-btn" class="btn auth-submit-btn">Login</button>
+            </div>
+
+            <div class="auth-panel" id="signup-panel">
+                <div class="panel-header">
+                    <h2>Create account</h2>
+                    <p>Join as a student or recruiter</p>
+                </div>
+                <div class="auth-form-fields signup-fields">
+                    <input type="text" id="full-name" placeholder="Full Name" required>
+                    <input type="email" id="signup-email" placeholder="Email address" required>
+                    <input type="password" id="signup-password" placeholder="Password" required>
+                    <input type="text" id="location" placeholder="City or Campus">
+                    <input type="text" id="skills" placeholder="Skills (comma separated)">
+                    <textarea id="bio" rows="3" placeholder="Short bio / company intro"></textarea>
+
+                    <div class="role-badge-selector" aria-label="Choose account role">
+                        <button type="button" class="role-badge active" data-role="student">
+                            <span class="role-dot role-student"></span>
+                            Student
+                        </button>
+                        <button type="button" class="role-badge" data-role="recruiter">
+                            <span class="role-dot role-recruiter"></span>
+                            Recruiter
+                        </button>
+                    </div>
+
+                    <select id="role-select" aria-label="Account role selector">
+                        <option value="student">Student (Job Seeker)</option>
+                        <option value="recruiter">Recruiter (Job Poster)</option>
+                    </select>
+                </div>
+                <button type="button" id="signup-btn" class="btn btn-secondary auth-submit-btn">Sign Up</button>
+            </div>
+
             <p id="auth-message" class="message"></p>
-        </div>
+        </section>
     </main>
 
-    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/auth.js?v=20260929"></script>
 </body>
 </html>

@@ -19,11 +19,17 @@ const navStudentDash = document.getElementById('nav-student-dash');
 const navRecruiterDash = document.getElementById('nav-recruiter-dash');
 const navSavedJobs = document.getElementById('nav-saved-jobs');
 const navIcons = document.getElementById('nav-icons');
+const profilePanel = document.getElementById('profile-panel');
+const profileSummary = document.getElementById('profile-summary');
+const profileSkills = document.getElementById('profile-skills');
+const profileMatchBadge = document.getElementById('profile-match-badge');
+const editProfileBtn = document.getElementById('edit-profile-btn');
 
 let allJobs = [];
 let currentUser = null;
 let userRole = null;
 let userLocation = null;
+let userSkills = [];
 
 // Auth State Check
 onAuthStateChanged(auth, async (user) => {
@@ -39,7 +45,8 @@ onAuthStateChanged(auth, async (user) => {
         if (docSnap.exists()) {
             userRole = docSnap.data().role;
             userLocation = docSnap.data().location;
-            
+            userSkills = parseSkills(docSnap.data().skills);
+
             if (userRole === 'recruiter') {
                 navPostJob.style.display = 'inline-block';
                 if(navRecruiterDash) navRecruiterDash.style.display = 'inline-block';
@@ -48,6 +55,9 @@ onAuthStateChanged(auth, async (user) => {
                 if(navSavedJobs) navSavedJobs.style.display = 'inline-block';
             }
         }
+
+        updateProfilePanel();
+        bindProfileEditor();
         
         // Initialize Notifications
         initNotifications();
@@ -63,6 +73,7 @@ onAuthStateChanged(auth, async (user) => {
         currentUser = null;
         userRole = null;
         userLocation = null;
+        userSkills = [];
         savedJobIds.clear();
         navLogin.style.display = 'inline-block';
         navLogout.style.display = 'none';
@@ -77,6 +88,94 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 let savedJobIds = new Set();
+
+function parseSkills(skills) {
+    if (!skills) return [];
+    if (Array.isArray(skills)) return skills.map(skill => String(skill).trim()).filter(Boolean);
+    return String(skills)
+        .split(',')
+        .map(skill => skill.trim())
+        .filter(Boolean);
+}
+
+function getSkillMatchScore(job) {
+    if (!userSkills.length) return 0;
+
+    const jobSkills = Array.isArray(job.requiredSkills)
+        ? job.requiredSkills
+        : typeof job.requiredSkills === 'string'
+            ? job.requiredSkills.split(',').map(skill => skill.trim()).filter(Boolean)
+            : [];
+
+    if (!jobSkills.length) return 0;
+
+    const normalizedUserSkills = userSkills.map(skill => skill.toLowerCase());
+    const matches = jobSkills.filter(skill => normalizedUserSkills.includes(String(skill).toLowerCase()));
+    const score = (matches.length / jobSkills.length) * 100;
+    return Math.round(score);
+}
+
+function updateProfilePanel() {
+    if (!profilePanel) return;
+
+    if (userRole !== 'student') {
+        profilePanel.style.display = 'none';
+        return;
+    }
+
+    const safeSkills = userSkills.length ? userSkills : ['Add skills to improve matching'];
+    profilePanel.style.display = 'block';
+    profileSummary.innerText = userSkills.length
+        ? `Profile matched to ${allJobs.length || 0} jobs based on your skills, location, and urgency.`
+        : 'Add your skills during signup to unlock job match recommendations.';
+    profileSkills.innerHTML = safeSkills
+        .slice(0, 6)
+        .map(skill => `<span class="skill-pill">${skill}</span>`)
+        .join('');
+
+    if (userSkills.length) {
+        profileMatchBadge.innerText = 'Skills active';
+        profileMatchBadge.className = 'tag tag-green';
+    } else {
+        profileMatchBadge.innerText = 'Profile not ready';
+        profileMatchBadge.className = 'tag tag-yellow';
+    }
+}
+
+function bindProfileEditor() {
+    if (!editProfileBtn) return;
+
+    editProfileBtn.addEventListener('click', async () => {
+        if (userRole !== 'student') return;
+
+        const currentSkills = userSkills.join(', ');
+        const newSkills = window.prompt('Update your skills (comma separated):', currentSkills);
+        if (newSkills === null) return;
+
+        const newBio = window.prompt('Update your short bio:', currentUser && currentUser.bio ? currentUser.bio : '');
+        if (newBio === null) return;
+
+        const cleanedSkills = parseSkills(newSkills);
+
+        try {
+            await updateDoc(doc(db, 'users', currentUser.uid), {
+                skills: cleanedSkills,
+                bio: newBio.trim(),
+                profileComplete: true
+            });
+
+            userSkills = cleanedSkills;
+            currentUser.bio = newBio.trim();
+            updateProfilePanel();
+            renderRecommendedJobs();
+            alert('Profile updated successfully.');
+        } catch (error) {
+            console.error('Profile update failed:', error);
+            alert('Could not update profile.');
+        }
+    });
+}
+
 async function fetchSavedJobs() {
     if (userRole !== 'student') return;
     try {
@@ -166,23 +265,34 @@ function renderJobs() {
 
 function renderRecommendedJobs() {
     if (!recommendedSection || !recommendedContainer) return;
-    
-    if (userRole !== 'student' || !userLocation) {
+
+    if (userRole !== 'student') {
         recommendedSection.style.display = 'none';
         return;
     }
 
-    // Match based on user location (if local) or online. 
-    // Already sorted by Urgency in loadJobs.
-    const recJobs = allJobs.filter(job => {
-        if (job.category === 'Online') return true; // Online jobs recommended anywhere
-        if (job.category === 'Local' && job.location && job.location.toLowerCase().includes(userLocation.toLowerCase())) {
-            return true;
-        }
-        return false;
-    });
+    const scoredJobs = allJobs
+        .map(job => ({
+            ...job,
+            matchScore: getSkillMatchScore(job),
+            locationMatch: job.category === 'Online'
+                ? true
+                : Boolean(job.location && userLocation && job.location.toLowerCase().includes(userLocation.toLowerCase()))
+        }))
+        .filter(job => {
+            if (userSkills.length) {
+                return job.matchScore > 0 || job.locationMatch;
+            }
+            return job.locationMatch;
+        })
+        .sort((a, b) => {
+            if (b.matchScore !== a.matchScore) return b.matchScore - a.matchScore;
+            if (a.urgency === 'Urgent' && b.urgency !== 'Urgent') return -1;
+            if (b.urgency === 'Urgent' && a.urgency !== 'Urgent') return 1;
+            return 0;
+        });
 
-    if (recJobs.length === 0) {
+    if (!scoredJobs.length) {
         recommendedSection.style.display = 'none';
         return;
     }
@@ -190,8 +300,7 @@ function renderRecommendedJobs() {
     recommendedContainer.innerHTML = '';
     recommendedSection.style.display = 'block';
 
-    // Show top 3 recommended
-    recJobs.slice(0, 3).forEach(job => {
+    scoredJobs.slice(0, 3).forEach(job => {
         const jobCard = createJobCard(job);
         recommendedContainer.appendChild(jobCard);
     });
@@ -199,35 +308,73 @@ function renderRecommendedJobs() {
     attachApplyListeners();
 }
 
+function normalizeJobData(job = {}) {
+    const type = job.type || 'Part-time';
+    const companyName = job.companyName || 'Company';
+    const location = job.location || 'Remote';
+    const title = job.title || 'Untitled Position';
+    const description = job.description || 'No description provided.';
+    const payment = job.payment ?? 'Negotiable';
+    const urgency = job.urgency || 'Normal';
+    const requiredSkills = Array.isArray(job.requiredSkills)
+        ? job.requiredSkills
+        : typeof job.requiredSkills === 'string'
+            ? job.requiredSkills.split(',').map(skill => skill.trim()).filter(Boolean)
+            : [];
+
+    return { type, companyName, location, title, description, payment, urgency, requiredSkills };
+}
+
 function createJobCard(job) {
     const jobCard = document.createElement('div');
     jobCard.className = 'job-card';
-    
+
+    const normalized = normalizeJobData(job);
+    const matchScore = userRole === 'student' ? getSkillMatchScore(job) : 0;
+    const taskCategory = job.taskCategory || 'Other';
+
     let urgencyClass = 'tag-yellow';
-    if (job.urgency === 'Urgent') urgencyClass = 'tag-red';
-    if (job.urgency === 'Flexible') urgencyClass = 'tag-green';
-    
-    const urgencyTag = `<span class="tag ${urgencyClass}">${job.urgency}</span>`;
-    const locationTag = job.category === 'Local' && job.location ? `<span class="tag">📍 ${job.location}</span>` : `<span class="tag">🌐 Online</span>`;
-    const paymentTag = `<span class="tag">💰 $${job.payment}</span>`;
-    
-    // Heart/Bookmark icon for saving jobs by students
+    if (normalized.urgency === 'Urgent') urgencyClass = 'tag-red';
+    if (normalized.urgency === 'Flexible') urgencyClass = 'tag-green';
+
+    const urgencyTag = `<span class="tag ${urgencyClass}">${normalized.urgency}</span>`;
+    const locationTag = job.category === 'Local' ? `<span class="tag">📍 ${normalized.location}</span>` : `<span class="tag">🌐 Remote</span>`;
+    const paymentTag = `<span class="tag">💰 $${normalized.payment}</span>`;
+    const typeTag = `<span class="tag">🕒 ${normalized.type}</span>`;
+    const recruiterVerified = job.recruiterVerified || false;
+    const verifiedTag = recruiterVerified ? '<span class="tag tag-green">Verified employer</span>' : '<span class="tag">Employer</span>';
+    const matchTag = userRole === 'student' && matchScore > 0
+        ? `<span class="tag tag-green">Match ${matchScore}%</span>`
+        : '';
+    const skillsMarkup = normalized.requiredSkills.length
+        ? `<div class="skill-list">${normalized.requiredSkills.slice(0, 4).map(skill => `<span class="skill-pill">${skill}</span>`).join('')}</div>`
+        : '';
+
     const isSaved = savedJobIds.has(job.id);
     const saveClass = isSaved ? 'saved' : '';
     const saveIcon = userRole === 'student' ? `<button class="save-btn ${saveClass}" data-jobid="${job.id}">❤️</button>` : '';
 
     jobCard.innerHTML = `
-        <div class="job-title" style="display:flex; justify-content:space-between; align-items:center;">
-            <span>${job.title} ${urgencyTag}</span>
+        <div class="job-header">
+            <div>
+                <div class="job-title">${normalized.title}</div>
+                <div class="job-company">${normalized.companyName}</div>
+            </div>
             ${saveIcon}
         </div>
         <div class="job-meta">
-            <span class="tag">${job.category}</span>
+            <span class="tag">${job.category || 'Local'}</span>
+            <span class="tag">${taskCategory}</span>
+            ${typeTag}
             ${locationTag}
             ${paymentTag}
+            ${urgencyTag}
+            ${verifiedTag}
+            ${matchTag}
         </div>
-        <div class="job-desc">${job.description}</div>
-        <button class="btn apply-btn" data-id="${job.id}">Apply Now</button>
+        <div class="job-desc">${normalized.description}</div>
+        ${skillsMarkup}
+        <button class="btn apply-btn" data-id="${job.id}">Claim This Task</button>
     `;
     return jobCard;
 }
@@ -313,6 +460,8 @@ async function handleApply(e) {
             alert("Job not found.");
             return;
         }
+
+        const jobData = docSnap.data();
         
         // Check for existing application
         const q = query(collection(db, "applications"), where("jobId", "==", jobId), where("studentId", "==", currentUser.uid));
@@ -322,18 +471,56 @@ async function handleApply(e) {
             return;
         }
 
-        await addDoc(collection(db, "applications"), {
+        const applicationPayload = {
             jobId: jobId,
             studentId: currentUser.uid,
             studentEmail: currentUser.email,
             status: "Applied",
             appliedAt: new Date(),
-            // Storing recruiterId inside application simplifies security rules
-            recruiterId: docSnap.data().recruiterId 
+            recruiterId: jobData.recruiterId,
+            jobTitle: jobData.title,
+            payment: jobData.payment || 0
+        };
+
+        const appDoc = await addDoc(collection(db, "applications"), applicationPayload);
+
+        const recruiterId = jobData.recruiterId;
+        const participants = [currentUser.uid, recruiterId].filter(Boolean);
+        const chatQuery = query(collection(db, "messages"), where("jobId", "==", jobId), where("participants", "array-contains-any", participants));
+        const existingChats = await getDocs(chatQuery);
+
+        if (existingChats.empty) {
+            const chatRef = await addDoc(collection(db, "messages"), {
+                participants,
+                jobId,
+                jobTitle: jobData.title,
+                lastMessage: `Application received for ${jobData.title}.`,
+                updatedAt: new Date(),
+                createdAt: new Date(),
+                recruiterId
+            });
+
+            await addDoc(collection(db, "messages", chatRef.id, "thread"), {
+                text: `Hi! I applied for your task: ${jobData.title}.`,
+                senderId: currentUser.uid,
+                timestamp: new Date()
+            });
+        }
+
+        await addDoc(collection(db, "notifications"), {
+            userId: currentUser.uid,
+            message: `Your application for "${jobData.title}" has been submitted successfully.`,
+            read: false,
+            timestamp: new Date()
         });
+
         alert("Application submitted successfully!");
         btn.innerText = "Applied";
         btn.disabled = true;
+
+        if (typeof window.initNotifications === 'function') {
+            window.initNotifications();
+        }
     } catch (error) {
         alert("Error applying to job.");
         console.error(error);

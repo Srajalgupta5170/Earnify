@@ -6,12 +6,14 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyBLuAodyq5w2yESWFo04GbCrxRMQj5eZ8Y",
+    authDomain: "earnify-62e39.firebaseapp.com",
+    projectId: "earnify-62e39",
+    storageBucket: "earnify-62e39.firebasestorage.app",
+    messagingSenderId:  "868888074417",
+    appId:  "1:868888074417:web:766c5bec702d830bc2aa90",
+    measurementId: "G-JT2CZ8CJVG"
+
 };
 
 // Initialize Firebase

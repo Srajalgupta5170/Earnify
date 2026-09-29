@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Earnify - Student Dashboard</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=20260929">
 </head>
 <body>
     <header>
@@ -12,12 +12,39 @@
         <nav>
             <a href="index.html">Home</a>
             <a href="student-dashboard.html">My Applications</a>
+            <a href="wallet.html">Wallet</a>
+            <a href="messages.html">Messages</a>
             <a href="#" id="nav-logout">Logout</a>
         </nav>
     </header>
 
     <main class="dashboard-container">
         <h2>My Applications</h2>
+        <div class="analytics-cards" style="margin-top:1rem;">
+            <div class="stat-card">
+                <h3>Total Tasks</h3>
+                <p id="student-total-apps">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Accepted</h3>
+                <p id="student-accepted-apps">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Pending</h3>
+                <p id="student-pending-apps">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Wallet</h3>
+                <p id="student-wallet">$0</p>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:1rem;">
+            <h3>Account Verification</h3>
+            <p id="verification-status">Status: Not Verified</p>
+            <button id="verify-btn" class="btn">Request Verification</button>
+        </div>
+
         <div id="loading-spinner" class="spinner" style="display: none;"></div>
         <div id="no-apps-msg" class="message" style="display: none;">You haven't applied to any jobs yet.</div>
         

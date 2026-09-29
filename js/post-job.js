@@ -28,21 +28,24 @@ form.addEventListener('submit', async (e) => {
     
     if (!currentUser) return;
 
+    const companyName = document.getElementById('company-name').value.trim();
     const title = document.getElementById('job-title').value.trim();
     const description = document.getElementById('job-desc').value.trim();
     const category = document.getElementById('job-category').value;
+    const taskCategory = document.getElementById('task-category').value;
     const location = document.getElementById('job-location').value.trim();
+    const type = document.getElementById('job-type').value;
     const paymentStr = document.getElementById('job-payment').value.trim();
+    const requiredSkills = document.getElementById('required-skills').value.trim();
     const urgency = document.getElementById('job-urgency').value;
 
-    // Validation
-    if (!title || !description || !paymentStr) {
+    if (!companyName || !title || !description || !paymentStr) {
         message.innerText = "Please fill out all required fields.";
         return;
     }
 
     if (category === 'Local' && !location) {
-        message.innerText = "Location is required for Local jobs.";
+        message.innerText = "Location is required for local jobs.";
         return;
     }
 
@@ -57,14 +60,20 @@ form.addEventListener('submit', async (e) => {
 
     try {
         await addDoc(collection(db, "jobs"), {
+            companyName,
             title,
             description,
             category,
+            taskCategory,
+            type,
             location,
             payment,
+            requiredSkills: requiredSkills ? requiredSkills.split(',').map(s => s.trim()).filter(Boolean) : [],
             urgency,
             recruiterId: currentUser.uid,
-            createdAt: new Date()
+            createdAt: new Date(),
+            active: true,
+            recruiterVerified: true
         });
         
         alert("Job posted successfully!");

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Earnify - Home</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=20260929">
 </head>
 <body>
     <header>
@@ -16,6 +16,8 @@
             <a href="recruiter-dashboard.html" id="nav-recruiter-dash" style="display:none;">My Posted Jobs</a>
             <a href="student-dashboard.html" id="nav-student-dash" style="display:none;">My Applications</a>
             <a href="saved-jobs.html" id="nav-saved-jobs" style="display:none;">Saved Jobs</a>
+            <a href="wallet.html" id="nav-wallet" style="display:none;">Wallet</a>
+            <a href="messages.html" id="nav-messages" style="display:none;">Messages</a>
             <a href="login.html" id="nav-login">Login / Signup</a>
             <div class="nav-icons" id="nav-icons" style="display:none;">
                 <div class="bell-icon" id="bell-icon">
@@ -31,16 +33,16 @@
 
     <main>
         <section class="hero">
-            <h1>Find Part-Time Jobs & Online Tasks</h1>
-            <p>The premium job platform exclusively for college students.</p>
+            <h1>Earn Extra Cash with Campus & Local Gigs</h1>
+            <p>Find flexible student-friendly tasks, short gigs, and online work that help cover daily expenses.</p>
         </section>
 
         <section class="filters card">
-            <input type="text" id="search-input" placeholder="Search by title...">
+            <input type="text" id="search-input" placeholder="Search tasks or gigs...">
             <select id="category-filter">
-                <option value="all">All Categories</option>
-                <option value="Local">Local Jobs</option>
-                <option value="Online">Online Tasks</option>
+                <option value="all">All Types</option>
+                <option value="Local">Campus & Local Gigs</option>
+                <option value="Online">Remote Tasks</option>
             </select>
             <select id="urgency-filter">
                 <option value="all">All Urgency Levels</option>
@@ -48,8 +50,18 @@
                 <option value="Normal">Normal</option>
                 <option value="Flexible">Flexible</option>
             </select>
-            <input type="text" id="location-filter" placeholder="Location (e.g., Campus)">
+            <input type="text" id="location-filter" placeholder="Campus or area (e.g., hostel, city)">
         </section>
+
+        <div id="profile-panel" class="card profile-panel" style="display: none; margin-bottom: 1.5rem;">
+            <div class="profile-header">
+                <h3>Your Profile</h3>
+                <span id="profile-match-badge" class="tag tag-green">Profile ready</span>
+                <button id="edit-profile-btn" class="btn btn-secondary small-btn" type="button">Edit Profile</button>
+            </div>
+            <p id="profile-summary">Complete your profile to get better matches.</p>
+            <div id="profile-skills" class="skill-list"></div>
+        </div>
 
         <div id="loading-spinner" class="spinner" style="display: none;"></div>
         

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earnify - Wallet</title>
+    <link rel="stylesheet" href="css/style.css?v=20260929">
+</head>
+<body>
+    <header>
+        <div class="logo">Earnify</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="student-dashboard.html">My Applications</a>
+            <a href="wallet.html">Wallet</a>
+            <a href="messages.html">Messages</a>
+            <a href="#" id="nav-logout">Logout</a>
+        </nav>
+    </header>
+
+    <main class="dashboard-container">
+        <h2>Student Wallet</h2>
+        <div id="loading-spinner" class="spinner" style="display: none;"></div>
+
+        <section class="wallet-grid">
+            <div class="wallet-card">
+                <h3>Available Balance</h3>
+                <p class="value" id="wallet-balance">$0</p>
+            </div>
+            <div class="wallet-card">
+                <h3>Pending Payout</h3>
+                <p class="value" id="wallet-pending">$0</p>
+            </div>
+            <div class="wallet-card">
+                <h3>Total Earned</h3>
+                <p class="value" id="wallet-total">$0</p>
+            </div>
+            <div class="wallet-card">
+                <h3>Completed Tasks</h3>
+                <p class="value" id="wallet-tasks">0</p>
+            </div>
+        </section>
+
+        <div class="list-card" style="margin-top: 1rem;">
+            <h3>Recent Earnings</h3>
+            <div id="wallet-history"></div>
+        </div>
+
+        <div class="list-card" style="margin-top: 1.5rem;">
+            <h3>Payout Request</h3>
+            <p class="subtle-text">Request your approved earnings to be sent to your preferred payout method.</p>
+            <button id="request-payout" class="btn" style="margin-top: 1rem;">Request Payout</button>
+        </div>
+    </main>
+
+    <script type="module" src="js/wallet.js"></script>
+</body>
+</html>

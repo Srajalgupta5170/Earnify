@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earnify - Messages</title>
+    <link rel="stylesheet" href="css/style.css?v=20260929">
+</head>
+<body>
+    <header>
+        <div class="logo">Earnify</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="student-dashboard.html">My Applications</a>
+            <a href="wallet.html">Wallet</a>
+            <a href="messages.html">Messages</a>
+            <a href="#" id="nav-logout">Logout</a>
+        </nav>
+    </header>
+
+    <main class="dashboard-container">
+        <h2>Messages</h2>
+        <div class="message-layout">
+            <aside class="conversation-list" id="conversation-list">
+                <h3>Chats</h3>
+            </aside>
+            <section class="chat-panel">
+                <div class="chat-thread" id="chat-thread"></div>
+                <form id="message-form" class="message-form">
+                    <textarea id="message-input" placeholder="Write a message..."></textarea>
+                    <button type="submit" class="btn">Send</button>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <script type="module" src="js/messages.js"></script>
+</body>
+</html>

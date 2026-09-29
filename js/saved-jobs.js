@@ -63,34 +63,48 @@ function renderSavedJobs(jobs) {
     if(loadingSpinner) loadingSpinner.style.display = 'none';
     if(noJobsMsg) noJobsMsg.style.display = 'none';
     jobsContainer.innerHTML = '';
-    
+
     if (jobs.length === 0) {
         if(noJobsMsg) noJobsMsg.style.display = 'block';
         return;
     }
-    
+
     jobs.forEach(job => {
+        const jobData = {
+            ...job,
+            companyName: job.companyName || 'Company',
+            type: job.type || 'Part-time',
+            location: job.location || 'Remote',
+            urgency: job.urgency || 'Normal',
+            description: job.description || 'No description provided.'
+        };
+
         const card = document.createElement('div');
-        card.className = `job-card ${job.urgency === 'Urgent' ? 'urgent' : ''}`;
+        card.className = `job-card ${jobData.urgency === 'Urgent' ? 'urgent' : ''}`;
         card.innerHTML = `
             <div class="job-header">
-                <h3>${job.title}</h3>
-                <button class="save-btn saved" data-id="${job.id}">❤️</button>
+                <div>
+                    <h3>${jobData.title}</h3>
+                    <div class="job-company">${jobData.companyName}</div>
+                </div>
+                <button class="save-btn saved" data-id="${jobData.id}">❤️</button>
             </div>
-            <p><strong>Company:</strong> ${job.companyName}</p>
-            <p><strong>Type:</strong> ${job.type}</p>
-            <p><strong>Location:</strong> ${job.location || 'N/A'}</p>
-            <p><strong>Urgency:</strong> <span class="urgency-badge">${job.urgency}</span></p>
-            <p>${job.description}</p>
-            <button class="apply-btn" data-id="${job.id}">Apply</button>
-            <button class="remove-saved-btn" style="background:#ff4d4d; color:white; border:none; padding:8px 12px; margin-left:10px; cursor:pointer;" data-saved-id="${job.savedId}">Remove</button>
+            <div class="job-meta">
+                <span class="tag">${jobData.category || 'Local'}</span>
+                <span class="tag">🕒 ${jobData.type}</span>
+                <span class="tag">📍 ${jobData.location}</span>
+                <span class="tag">💰 $${jobData.payment ?? 'Negotiable'}</span>
+                <span class="tag tag-yellow">${jobData.urgency}</span>
+            </div>
+            <p>${jobData.description}</p>
+            <div class="job-actions">
+                <button class="apply-btn" data-id="${jobData.id}">Apply</button>
+                <button class="remove-saved-btn" data-saved-id="${jobData.savedId}">Remove</button>
+            </div>
         `;
         jobsContainer.appendChild(card);
     });
 
-    // We don't implement handleApply again, we rely on app.js for applying
-    
-    // Implementing remove from saved list
     document.querySelectorAll('.remove-saved-btn').forEach(btn => {
         btn.addEventListener('click', handleRemoveSaved);
     });

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Earnify - Recruiter Dashboard</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=20260929">
 </head>
 <body>
     <header>
@@ -13,6 +13,7 @@
             <a href="index.html">Home</a>
             <a href="post-job.html">Post a Job</a>
             <a href="recruiter-dashboard.html">My Posted Jobs</a>
+            <a href="messages.html">Messages</a>
             <a href="#" id="nav-logout">Logout</a>
         </nav>
     </header>
@@ -34,6 +35,12 @@
                 <p id="accept-ratio-count">0 / 0</p>
             </div>
         </section>
+
+        <div class="card" style="margin-top:1rem;">
+            <h3>Account Verification</h3>
+            <p id="verification-status">Status: Not Verified</p>
+            <button id="verify-btn" class="btn">Request Verification</button>
+        </div>
 
         <h2>Detailed Postings</h2>
         <div id="loading-spinner" class="spinner" style="display: none;"></div>
